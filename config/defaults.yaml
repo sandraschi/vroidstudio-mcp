@@ -1,0 +1,1492 @@
+version: 2
+description: VRoid Studio step templates — generated from step_builder.py (shortcut-first)
+calibration:
+  resolution:
+  - 1920
+  - 1080
+  notes: Clicks only for sample tile and preset thumbnails. All navigation via shortcuts.
+templates:
+  female_sample_minimal:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - &id001
+      action: sample_click
+      name: pick_sample
+      state: sample_selected
+      require_change: true
+    - &id002
+      action: shortcut
+      name: confirm_sample
+      shortcut: dialog_ok
+      require_change: true
+    - &id003
+      action: wait_stable
+      name: model_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_blank:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - action: shortcut
+      name: dismiss_sample
+      shortcut: dialog_cancel
+      require_change: false
+      optional: true
+    - action: wait_stable
+      name: blank_model_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_hair:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: click
+      name: hair_preset
+      x: 720
+      y: 340
+      require_change: true
+    - action: wait_stable
+      name: hair_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_face:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: click
+      name: face_preset
+      x: 720
+      y: 300
+      require_change: true
+    - action: wait_stable
+      name: face_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_body:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: click
+      name: body_preset
+      x: 720
+      y: 360
+      require_change: true
+    - action: wait_stable
+      name: body_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_outfit:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: click
+      name: outfit_preset
+      x: 720
+      y: 380
+      require_change: true
+    - action: wait_stable
+      name: outfit_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_accessory:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: accessories_editor
+      shortcut: accessories_editor
+      state: accessories_editor
+      require_change: false
+    - action: wait_stable
+      name: accessories_editor_stable
+      require_change: false
+    - action: click
+      name: accessory_preset
+      x: 720
+      y: 400
+      require_change: true
+    - action: wait_stable
+      name: accessory_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_sample_full:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: shortcut
+      name: accessories_editor
+      shortcut: accessories_editor
+      state: accessories_editor
+      require_change: false
+    - action: wait_stable
+      name: accessories_editor_stable
+      require_change: false
+    - action: shortcut
+      name: looks_editor
+      shortcut: looks_editor
+      state: looks_editor
+      require_change: false
+    - action: wait_stable
+      name: looks_editor_stable
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_vtuber:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: click
+      name: outfit_preset
+      x: 720
+      y: 380
+      require_change: true
+    - action: wait_stable
+      name: outfit_preset_applied
+      require_change: false
+    - action: shortcut
+      name: photo_booth
+      shortcut: photo_booth
+      state: photo_booth
+      require_change: false
+    - action: wait_stable
+      name: photo_booth_stable
+      require_change: false
+    - action: shortcut
+      name: front_view
+      shortcut: front_view
+      require_change: false
+    - action: shortcut
+      name: zoom_in
+      shortcut: zoom_in
+      require_change: false
+    - action: wait_stable
+      name: camera_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_photo_booth:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: photo_booth
+      shortcut: photo_booth
+      state: photo_booth
+      require_change: false
+    - action: wait_stable
+      name: photo_booth_stable
+      require_change: false
+    - action: shortcut
+      name: front_view
+      shortcut: front_view
+      require_change: false
+    - action: shortcut
+      name: zoom_in
+      shortcut: zoom_in
+      require_change: false
+    - action: wait_stable
+      name: camera_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  female_editor_tour:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: shortcut
+      name: accessories_editor
+      shortcut: accessories_editor
+      state: accessories_editor
+      require_change: false
+    - action: wait_stable
+      name: accessories_editor_stable
+      require_change: false
+    - action: shortcut
+      name: looks_editor
+      shortcut: looks_editor
+      state: looks_editor
+      require_change: false
+    - action: wait_stable
+      name: looks_editor_stable
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_minimal:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_blank:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - action: shortcut
+      name: dismiss_sample
+      shortcut: dialog_cancel
+      require_change: false
+      optional: true
+    - action: wait_stable
+      name: blank_model_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_hair:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: click
+      name: hair_preset
+      x: 720
+      y: 440
+      require_change: true
+    - action: wait_stable
+      name: hair_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_face:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: click
+      name: face_preset
+      x: 720
+      y: 400
+      require_change: true
+    - action: wait_stable
+      name: face_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_body:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: click
+      name: body_preset
+      x: 720
+      y: 460
+      require_change: true
+    - action: wait_stable
+      name: body_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_outfit:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: click
+      name: outfit_preset
+      x: 720
+      y: 480
+      require_change: true
+    - action: wait_stable
+      name: outfit_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_sample_full:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: shortcut
+      name: accessories_editor
+      shortcut: accessories_editor
+      state: accessories_editor
+      require_change: false
+    - action: wait_stable
+      name: accessories_editor_stable
+      require_change: false
+    - action: shortcut
+      name: looks_editor
+      shortcut: looks_editor
+      state: looks_editor
+      require_change: false
+    - action: wait_stable
+      name: looks_editor_stable
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_vtuber:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: click
+      name: outfit_preset
+      x: 720
+      y: 480
+      require_change: true
+    - action: wait_stable
+      name: outfit_preset_applied
+      require_change: false
+    - action: shortcut
+      name: photo_booth
+      shortcut: photo_booth
+      state: photo_booth
+      require_change: false
+    - action: wait_stable
+      name: photo_booth_stable
+      require_change: false
+    - action: shortcut
+      name: front_view
+      shortcut: front_view
+      require_change: false
+    - action: shortcut
+      name: zoom_in
+      shortcut: zoom_in
+      require_change: false
+    - action: wait_stable
+      name: camera_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_photo_booth:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: photo_booth
+      shortcut: photo_booth
+      state: photo_booth
+      require_change: false
+    - action: wait_stable
+      name: photo_booth_stable
+      require_change: false
+    - action: shortcut
+      name: front_view
+      shortcut: front_view
+      require_change: false
+    - action: shortcut
+      name: zoom_in
+      shortcut: zoom_in
+      require_change: false
+    - action: wait_stable
+      name: camera_ready
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  male_editor_tour:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: new_project
+      shortcut: new
+      state: new_project
+      require_change: false
+    - action: wait_stable
+      name: new_project_stable
+      require_change: false
+    - *id001
+    - *id002
+    - *id003
+    - action: shortcut
+      name: face_editor
+      shortcut: face_editor
+      state: face_editor
+      require_change: false
+    - action: wait_stable
+      name: face_editor_stable
+      require_change: false
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: shortcut
+      name: body_editor
+      shortcut: body_editor
+      state: body_editor
+      require_change: false
+    - action: wait_stable
+      name: body_editor_stable
+      require_change: false
+    - action: shortcut
+      name: outfits_editor
+      shortcut: outfits_editor
+      state: outfits_editor
+      require_change: false
+    - action: wait_stable
+      name: outfits_editor_stable
+      require_change: false
+    - action: shortcut
+      name: accessories_editor
+      shortcut: accessories_editor
+      state: accessories_editor
+      require_change: false
+    - action: wait_stable
+      name: accessories_editor_stable
+      require_change: false
+    - action: shortcut
+      name: looks_editor
+      shortcut: looks_editor
+      state: looks_editor
+      require_change: false
+    - action: wait_stable
+      name: looks_editor_stable
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  open_and_export:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: open_dialog
+      shortcut: open
+      require_change: false
+    - action: wait_stable
+      name: open_dialog_stable
+      require_change: false
+    - action: open_file
+      name: select_project
+      state: project_open
+      require_change: false
+    - action: wait_stable
+      name: project_loaded
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  open_edit_hair_export:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: open_dialog
+      shortcut: open
+      require_change: false
+    - action: wait_stable
+      name: open_dialog_stable
+      require_change: false
+    - action: open_file
+      name: select_project
+      state: project_open
+      require_change: false
+    - action: wait_stable
+      name: project_loaded
+      require_change: false
+    - action: shortcut
+      name: hair_editor
+      shortcut: hairstyle_editor
+      state: hair_editor
+      require_change: false
+    - action: wait_stable
+      name: hair_editor_stable
+      require_change: false
+    - action: click
+      name: hair_preset
+      x: 720
+      y: 340
+      require_change: true
+    - action: wait_stable
+      name: hair_preset_applied
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false
+    - action: shortcut
+      name: export_vrm
+      shortcut: export_vrm
+      state: exporting
+      require_change: false
+    - action: sleep
+      name: export_dialog_wait
+      seconds: 5
+      require_change: false
+    - action: export_dialog
+      name: export_dialog
+      state: export_dialog
+      seconds: 8
+      require_change: false
+  open_save_only:
+    steps:
+    - action: launch
+      name: launch_vroid
+      state: launched
+      require_change: false
+    - action: focus
+      name: focus_window
+      state: focused
+      require_change: false
+    - action: shortcut
+      name: open_dialog
+      shortcut: open
+      require_change: false
+    - action: wait_stable
+      name: open_dialog_stable
+      require_change: false
+    - action: open_file
+      name: select_project
+      state: project_open
+      require_change: false
+    - action: wait_stable
+      name: project_loaded
+      require_change: false
+    - action: shortcut
+      name: save_project
+      shortcut: save
+      require_change: false
+    - action: wait_stable
+      name: save_done
+      require_change: false

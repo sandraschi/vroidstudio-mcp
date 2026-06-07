@@ -1,0 +1,550 @@
+version: 1
+description: 55 VRoid Studio puppet archetypes — config-driven, 1920x1080 baseline
+archetypes:
+  anime_gal_default:
+    display_name: Anime Gal Default
+    category: female_anime
+    template: female_sample_minimal
+    export_name: anime_gal_default.vrm
+    tags:
+    - female
+    sample_click:
+      x: 960
+      y: 420
+  anime_gal_long_hair:
+    display_name: Anime Gal Long Hair
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_long_hair.vrm
+    tags:
+    - female
+    sample_click:
+      x: 800
+      y: 380
+  anime_gal_short_hair:
+    display_name: Anime Gal Short Hair
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_short_hair.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1120
+      y: 380
+  anime_gal_twintail:
+    display_name: Anime Gal Twintails
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_twintail.vrm
+    tags:
+    - female
+    sample_click:
+      x: 640
+      y: 380
+  anime_gal_ponytail:
+    display_name: Anime Gal Ponytail
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_ponytail.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1280
+      y: 380
+  anime_gal_bob:
+    display_name: Anime Gal Bob Cut
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_bob.vrm
+    tags:
+    - female
+    sample_click:
+      x: 720
+      y: 460
+  anime_gal_hime:
+    display_name: Anime Gal Hime Cut
+    category: female_anime
+    template: female_sample_hair
+    export_name: anime_gal_hime.vrm
+    tags:
+    - female
+    sample_click:
+      x: 880
+      y: 460
+  anime_gal_mature:
+    display_name: Anime Gal Mature
+    category: female_anime
+    template: female_sample_face
+    export_name: anime_gal_mature.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1040
+      y: 460
+  anime_gal_idol:
+    display_name: Anime Gal Idol
+    category: female_anime
+    template: female_sample_outfit
+    export_name: anime_gal_idol.vrm
+    tags:
+    - female
+    sample_click:
+      x: 960
+      y: 340
+  anime_gal_gothic:
+    display_name: Anime Gal Gothic
+    category: female_anime
+    template: female_sample_outfit
+    export_name: anime_gal_gothic.vrm
+    tags:
+    - female
+    sample_click:
+      x: 800
+      y: 460
+  anime_gal_sporty:
+    display_name: Anime Gal Sporty
+    category: female_anime
+    template: female_sample_outfit
+    export_name: anime_gal_sporty.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1120
+      y: 460
+  anime_gal_catgirl:
+    display_name: Anime Gal Catgirl
+    category: female_anime
+    template: female_sample_accessory
+    export_name: anime_gal_catgirl.vrm
+    tags:
+    - female
+    sample_click:
+      x: 640
+      y: 340
+  anime_gal_foxgirl:
+    display_name: Anime Gal Foxgirl
+    category: female_anime
+    template: female_sample_accessory
+    export_name: anime_gal_foxgirl.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1280
+      y: 340
+  anime_gal_glasses:
+    display_name: Anime Gal Glasses
+    category: female_anime
+    template: female_sample_face
+    export_name: anime_gal_glasses.vrm
+    tags:
+    - female
+    sample_click:
+      x: 720
+      y: 340
+  anime_gal_magical:
+    display_name: Anime Gal Magical Girl
+    category: female_anime
+    template: female_sample_outfit
+    export_name: anime_gal_magical.vrm
+    tags:
+    - female
+    sample_click:
+      x: 880
+      y: 340
+  anime_guy_default:
+    display_name: Anime Guy Default
+    category: male_anime
+    template: male_sample_minimal
+    export_name: anime_guy_default.vrm
+    tags:
+    - male
+    sample_click:
+      x: 960
+      y: 520
+  anime_guy_long_hair:
+    display_name: Anime Guy Long Hair
+    category: male_anime
+    template: male_sample_hair
+    export_name: anime_guy_long_hair.vrm
+    tags:
+    - male
+    sample_click:
+      x: 800
+      y: 520
+  anime_guy_short_hair:
+    display_name: Anime Guy Short Hair
+    category: male_anime
+    template: male_sample_hair
+    export_name: anime_guy_short_hair.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1120
+      y: 520
+  anime_guy_hero:
+    display_name: Anime Guy Hero
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_hero.vrm
+    tags:
+    - male
+    sample_click:
+      x: 640
+      y: 520
+  anime_guy_delinquent:
+    display_name: Anime Guy Delinquent
+    category: male_anime
+    template: male_sample_hair
+    export_name: anime_guy_delinquent.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1280
+      y: 520
+  anime_guy_gentleman:
+    display_name: Anime Guy Gentleman
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_gentleman.vrm
+    tags:
+    - male
+    sample_click:
+      x: 720
+      y: 600
+  anime_guy_athlete:
+    display_name: Anime Guy Athlete
+    category: male_anime
+    template: male_sample_body
+    export_name: anime_guy_athlete.vrm
+    tags:
+    - male
+    sample_click:
+      x: 880
+      y: 600
+  anime_guy_idol:
+    display_name: Anime Guy Idol
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_idol.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1040
+      y: 520
+  anime_guy_gothic:
+    display_name: Anime Guy Gothic
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_gothic.vrm
+    tags:
+    - male
+    sample_click:
+      x: 800
+      y: 600
+  anime_guy_nerd:
+    display_name: Anime Guy Nerd
+    category: male_anime
+    template: male_sample_face
+    export_name: anime_guy_nerd.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1120
+      y: 600
+  anime_guy_samurai:
+    display_name: Anime Guy Samurai
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_samurai.vrm
+    tags:
+    - male
+    sample_click:
+      x: 640
+      y: 600
+  anime_guy_modern:
+    display_name: Anime Guy Modern Street
+    category: male_anime
+    template: male_sample_outfit
+    export_name: anime_guy_modern.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1280
+      y: 600
+  realistic_female_default:
+    display_name: Realistic Female Default
+    category: female_realistic
+    template: female_sample_minimal
+    export_name: realistic_female_default.vrm
+    tags:
+    - female
+    sample_click:
+      x: 960
+      y: 420
+  realistic_female_mature:
+    display_name: Realistic Female Mature
+    category: female_realistic
+    template: female_sample_face
+    export_name: realistic_female_mature.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1040
+      y: 420
+  realistic_female_young:
+    display_name: Realistic Female Young
+    category: female_realistic
+    template: female_sample_face
+    export_name: realistic_female_young.vrm
+    tags:
+    - female
+    sample_click:
+      x: 880
+      y: 420
+  realistic_female_athletic:
+    display_name: Realistic Female Athletic
+    category: female_realistic
+    template: female_sample_body
+    export_name: realistic_female_athletic.vrm
+    tags:
+    - female
+    sample_click:
+      x: 800
+      y: 420
+  realistic_female_professional:
+    display_name: Realistic Female Professional
+    category: female_realistic
+    template: female_sample_outfit
+    export_name: realistic_female_professional.vrm
+    tags:
+    - female
+    sample_click:
+      x: 1120
+      y: 420
+  realistic_male_default:
+    display_name: Realistic Male Default
+    category: male_realistic
+    template: male_sample_minimal
+    export_name: realistic_male_default.vrm
+    tags:
+    - male
+    sample_click:
+      x: 960
+      y: 520
+  realistic_male_mature:
+    display_name: Realistic Male Mature
+    category: male_realistic
+    template: male_sample_face
+    export_name: realistic_male_mature.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1040
+      y: 520
+  realistic_male_young:
+    display_name: Realistic Male Young
+    category: male_realistic
+    template: male_sample_face
+    export_name: realistic_male_young.vrm
+    tags:
+    - male
+    sample_click:
+      x: 880
+      y: 520
+  realistic_male_athletic:
+    display_name: Realistic Male Athletic
+    category: male_realistic
+    template: male_sample_body
+    export_name: realistic_male_athletic.vrm
+    tags:
+    - male
+    sample_click:
+      x: 800
+      y: 520
+  realistic_male_professional:
+    display_name: Realistic Male Professional
+    category: male_realistic
+    template: male_sample_outfit
+    export_name: realistic_male_professional.vrm
+    tags:
+    - male
+    sample_click:
+      x: 1120
+      y: 520
+  stylized_chibi_female:
+    display_name: Stylized Chibi Female
+    category: stylized
+    template: female_sample_body
+    export_name: stylized_chibi_female.vrm
+    tags:
+    - stylized
+    sample_click:
+      x: 960
+      y: 380
+  stylized_chibi_male:
+    display_name: Stylized Chibi Male
+    category: stylized
+    template: male_sample_body
+    export_name: stylized_chibi_male.vrm
+    tags:
+    - stylized
+    sample_click:
+      x: 960
+      y: 560
+  stylized_toon_female:
+    display_name: Stylized Toon Female
+    category: stylized
+    template: female_sample_face
+    export_name: stylized_toon_female.vrm
+    tags:
+    - stylized
+    sample_click:
+      x: 720
+      y: 420
+  stylized_toon_male:
+    display_name: Stylized Toon Male
+    category: stylized
+    template: male_sample_face
+    export_name: stylized_toon_male.vrm
+    tags:
+    - stylized
+    sample_click:
+      x: 720
+      y: 520
+  stylized_mascot:
+    display_name: Stylized Mascot
+    category: stylized
+    template: female_sample_accessory
+    export_name: stylized_mascot.vrm
+    tags:
+    - stylized
+    sample_click:
+      x: 1120
+      y: 340
+  vtuber_female:
+    display_name: VTuber Ready Female
+    category: vtuber
+    template: female_vtuber
+    export_name: vtuber_female.vrm
+    tags:
+    - vtuber
+    sample_click:
+      x: 960
+      y: 400
+  vtuber_male:
+    display_name: VTuber Ready Male
+    category: vtuber
+    template: male_vtuber
+    export_name: vtuber_male.vrm
+    tags:
+    - vtuber
+    sample_click:
+      x: 960
+      y: 540
+  vrchat_female:
+    display_name: VRChat Optimized Female
+    category: vtuber
+    template: female_editor_tour
+    export_name: vrchat_female.vrm
+    tags:
+    - vtuber
+    sample_click:
+      x: 960
+      y: 420
+  vrchat_male:
+    display_name: VRChat Optimized Male
+    category: vtuber
+    template: male_editor_tour
+    export_name: vrchat_male.vrm
+    tags:
+    - vtuber
+    sample_click:
+      x: 960
+      y: 520
+  stream_ready:
+    display_name: Stream Ready Neutral
+    category: vtuber
+    template: female_photo_booth
+    export_name: stream_ready.vrm
+    tags:
+    - vtuber
+    sample_click:
+      x: 1040
+      y: 460
+  winter_female:
+    display_name: Winter Female
+    category: seasonal
+    template: female_sample_outfit
+    export_name: winter_female.vrm
+    tags:
+    - seasonal
+    sample_click:
+      x: 800
+      y: 400
+  summer_female:
+    display_name: Summer Female
+    category: seasonal
+    template: female_sample_outfit
+    export_name: summer_female.vrm
+    tags:
+    - seasonal
+    sample_click:
+      x: 1120
+      y: 400
+  winter_male:
+    display_name: Winter Male
+    category: seasonal
+    template: male_sample_outfit
+    export_name: winter_male.vrm
+    tags:
+    - seasonal
+    sample_click:
+      x: 800
+      y: 540
+  summer_male:
+    display_name: Summer Male
+    category: seasonal
+    template: male_sample_outfit
+    export_name: summer_male.vrm
+    tags:
+    - seasonal
+    sample_click:
+      x: 1120
+      y: 540
+  fantasy_elf:
+    display_name: Fantasy Elf
+    category: seasonal
+    template: female_sample_accessory
+    export_name: fantasy_elf.vrm
+    tags:
+    - seasonal
+    sample_click:
+      x: 1280
+      y: 420
+  quick_gal:
+    display_name: Quick Gal (Fleet Legacy)
+    category: fleet
+    template: female_sample_minimal
+    export_name: quick_gal.vrm
+    tags:
+    - fleet
+    - legacy
+    sample_click:
+      x: 960
+      y: 420
+  blank_female:
+    display_name: Blank Female
+    category: fleet
+    template: female_blank
+    export_name: blank_female.vrm
+    tags:
+    - fleet
+    skip_sample: true
+  blank_male:
+    display_name: Blank Male
+    category: fleet
+    template: male_blank
+    export_name: blank_male.vrm
+    tags:
+    - fleet
+    skip_sample: true
