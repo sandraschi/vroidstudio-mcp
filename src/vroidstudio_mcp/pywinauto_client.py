@@ -219,3 +219,20 @@ async def visual_screenshot(
 async def mouse_click(x: int, y: int, *, base_url: str | None = None) -> dict[str, Any]:
     req = {"operation": "click", "x": x, "y": y}
     return await call_pywinauto_tool("automation_mouse", {"request": req}, base_url=base_url)
+
+
+async def automation_task(
+    operation: str,
+    *,
+    base_url: str | None = None,
+    timeout: float = 600.0,
+    **fields: Any,
+) -> dict[str, Any]:
+    """Call automation_task on cua-mcp (closed-loop step runner)."""
+    req: dict[str, Any] = {"operation": operation, **fields}
+    return await call_pywinauto_tool(
+        "automation_task",
+        {"request": req},
+        base_url=base_url,
+        timeout=timeout,
+    )

@@ -16,16 +16,19 @@ from typing import Any
 from vroidstudio_mcp.archetypes import ArchetypeCatalog, StepDef, load_catalog
 from vroidstudio_mcp.config import VRoidStudioConfig
 from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoidStudioShortcuts
+from vroidstudio_mcp.preflight import PreflightConfig, run_preflight
 from vroidstudio_mcp.pywinauto_client import (
     automation_assert,
     automation_dialog,
     automation_shortcut,
+    automation_task,
     call_pywinauto_tool,
     keyboard,
     mouse_click,
     visual_screenshot,
     windows,
 )
+from vroidstudio_mcp.task_steps import step_defs_to_task_steps, verify_export_task_step
 from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 
 logger = logging.getLogger(__name__)
@@ -415,6 +418,62 @@ class AutomationEngine:
             return
         raise RuntimeError(f"Unknown step action: {action}")
 
+    def _preflight_config(self) -> PreflightConfig:
+        return PreflightConfig(
+            enabled=self.config.use_sysadmin_preflight,
+            min_memory_mb=self.config.preflight_min_memory_mb,
+            min_disk_mb=self.config.preflight_min_disk_mb,
+            sysadmin_url=self.config.system_admin_url,
+        )
+
+    async def _run_preflight(self, output_dir: Path) -> dict[str, Any]:
+        result = await run_preflight(output_dir=output_dir, config=self._preflight_config())
+        if not result.ok:
+            return {"success": False, "error": result.error, "preflight": result.to_dict()}
+        out: dict[str, Any] = {"success": True, "preflight": result.to_dict()}
+        if result.warnings:
+            out["warnings"] = result.warnings
+        return out
+
+    async def _run_steps_via_task(
+        self,
+        task_steps: list[dict[str, Any]],
+        *,
+        label: str,
+    ) -> dict[str, Any]:
+        if not task_steps:
+            return {"success": True, "steps_executed": [], "task_id": None}
+
+        result = await automation_task(
+            "run",
+            app="vroidstudio",
+            steps=task_steps,
+            window_handle=self._handle,
+            output_dir=str(self.config.screenshot_dir),
+            base_url=self.config.pywinauto_url,
+        )
+        if not result.get("success"):
+            data = result.get("data") or {}
+            return {
+                "success": False,
+                "error": result.get("error", f"{label} task failed"),
+                "task_id": data.get("task_id"),
+                "evidence": data.get("evidence"),
+                "task_status": data.get("status"),
+            }
+
+        data = result.get("data") or {}
+        executed = [s.get("name") or s.get("kind") for s in task_steps]
+        if self._session:
+            self._session.completed_steps.extend(executed)
+            self._save_session()
+        return {
+            "success": True,
+            "task_id": data.get("task_id"),
+            "steps_executed": executed,
+            "evidence": data.get("evidence"),
+        }
+
     async def run_template(
         self,
         template_name: str,
@@ -448,16 +507,51 @@ class AutomationEngine:
         steps = self.catalog.templates[template_name]
         executed: list[str] = []
         try:
-            for step in steps:
-                step_name = step.name or step.action
-                if resume and step_name in (self._session.completed_steps if self._session else []):
-                    continue
-                await self._execute_step(step, holder)
-                executed.append(step_name)
+            if self.config.use_cua_task and not resume:
+                pf = await self._run_preflight(self.config.output_dir)
+                if not pf.get("success"):
+                    return {"success": False, "template": template_name, "session_id": sid, **pf}
 
-            if export_path:
-                verify = StepDef(action="verify_file", name="verify_export", require_change=False)
-                await self._execute_step(verify, holder)
+                for step in steps:
+                    if step.action == "launch":
+                        launch = await self.launch_vroid()
+                        if not launch.get("success"):
+                            raise RuntimeError(launch.get("error", "launch failed"))
+                    elif step.action == "focus":
+                        focus = await self.focus_vroid()
+                        if not focus.get("success"):
+                            raise RuntimeError(focus.get("error", "focus failed"))
+
+                task_steps, hybrid = step_defs_to_task_steps(
+                    steps,
+                    holder,
+                    scale_click=self._scale_click,
+                    stable_frames_required=self.config.stable_frames_required,
+                    stable_timeout_s=self.config.stable_timeout_s,
+                )
+                if export_path:
+                    task_steps.append(verify_export_task_step(holder["path"]))
+
+                task_result = await self._run_steps_via_task(task_steps, label=f"template:{template_name}")
+                if not task_result.get("success"):
+                    raise RuntimeError(task_result.get("error", "task failed"))
+                executed.extend(task_result.get("steps_executed") or [])
+
+                for step in hybrid:
+                    step_name = step.name or step.action
+                    await self._execute_step(step, holder)
+                    executed.append(step_name)
+            else:
+                for step in steps:
+                    step_name = step.name or step.action
+                    if resume and step_name in (self._session.completed_steps if self._session else []):
+                        continue
+                    await self._execute_step(step, holder)
+                    executed.append(step_name)
+
+                if export_path:
+                    verify = StepDef(action="verify_file", name="verify_export", require_change=False)
+                    await self._execute_step(verify, holder)
 
             if self._session:
                 self._session.state = WorkflowState.COMPLETE
@@ -545,17 +639,56 @@ class AutomationEngine:
         executed: list[str] = []
 
         try:
-            for step in steps:
-                step_name = step.name or step.action
-                if step.action == "set_export_name":
-                    continue
-                if resume and step_name in (self._session.completed_steps if self._session else []):
-                    continue
-                await self._execute_step(step, export_holder)
-                executed.append(step_name)
+            if self.config.use_cua_task and not resume:
+                pf = await self._run_preflight(self.config.output_dir)
+                if not pf.get("success"):
+                    return {
+                        "success": False,
+                        "archetype_id": archetype_id,
+                        "session_id": sid,
+                        **pf,
+                    }
 
-            verify = StepDef(action="verify_file", name="verify_export", require_change=False)
-            await self._execute_step(verify, export_holder)
+                for step in steps:
+                    if step.action == "launch":
+                        launch = await self.launch_vroid()
+                        if not launch.get("success"):
+                            raise RuntimeError(launch.get("error", "launch failed"))
+                    elif step.action == "focus":
+                        focus = await self.focus_vroid()
+                        if not focus.get("success"):
+                            raise RuntimeError(focus.get("error", "focus failed"))
+
+                task_steps, hybrid = step_defs_to_task_steps(
+                    steps,
+                    export_holder,
+                    scale_click=self._scale_click,
+                    stable_frames_required=self.config.stable_frames_required,
+                    stable_timeout_s=self.config.stable_timeout_s,
+                )
+                task_steps.append(verify_export_task_step(export_path))
+
+                task_result = await self._run_steps_via_task(task_steps, label=archetype_id)
+                if not task_result.get("success"):
+                    raise RuntimeError(task_result.get("error", "task failed"))
+                executed.extend(task_result.get("steps_executed") or [])
+
+                for step in hybrid:
+                    step_name = step.name or step.action
+                    await self._execute_step(step, export_holder)
+                    executed.append(step_name)
+            else:
+                for step in steps:
+                    step_name = step.name or step.action
+                    if step.action == "set_export_name":
+                        continue
+                    if resume and step_name in (self._session.completed_steps if self._session else []):
+                        continue
+                    await self._execute_step(step, export_holder)
+                    executed.append(step_name)
+
+                verify = StepDef(action="verify_file", name="verify_export", require_change=False)
+                await self._execute_step(verify, export_holder)
 
             self._session.state = WorkflowState.COMPLETE
             self._session.export_path = export_path

@@ -55,6 +55,22 @@ class VRoidStudioConfig:
     use_cua_shortcut: bool = field(
         default_factory=lambda: os.environ.get("VROID_USE_CUA_SHORTCUT", "1").strip().lower() not in ("0", "false", "no")
     )
+    use_cua_task: bool = field(
+        default_factory=lambda: os.environ.get("VROID_USE_CUA_TASK", "1").strip().lower() not in ("0", "false", "no")
+    )
+    use_sysadmin_preflight: bool = field(
+        default_factory=lambda: os.environ.get("VROID_USE_SYSADMIN_PREFLIGHT", "1").strip().lower()
+        not in ("0", "false", "no")
+    )
+    system_admin_url: str = field(
+        default_factory=lambda: os.environ.get("SYSTEM_ADMIN_MCP_URL", "http://127.0.0.1:10861")
+    )
+    preflight_min_memory_mb: float = field(
+        default_factory=lambda: float(os.environ.get("VROID_PREFLIGHT_MIN_MEMORY_MB", "2048"))
+    )
+    preflight_min_disk_mb: float = field(
+        default_factory=lambda: float(os.environ.get("VROID_PREFLIGHT_MIN_DISK_MB", "500"))
+    )
     hash_algorithm: str = field(
         default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash")
     )
