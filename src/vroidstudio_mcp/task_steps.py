@@ -48,6 +48,15 @@ def step_defs_to_task_steps(
     return task_steps, hybrid
 
 
+def filter_completed_task_steps(
+    task_steps: list[TaskStep],
+    completed: set[str] | list[str],
+) -> list[TaskStep]:
+    """Drop task steps already recorded in session.completed_steps (resume)."""
+    done = set(completed)
+    return [s for s in task_steps if (s.get("name") or s.get("kind", "")) not in done]
+
+
 def verify_export_task_step(export_path: str) -> TaskStep:
     return {
         "name": "verify_export",

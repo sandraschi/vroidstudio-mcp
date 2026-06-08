@@ -28,7 +28,11 @@ from vroidstudio_mcp.pywinauto_client import (
     visual_screenshot,
     windows,
 )
-from vroidstudio_mcp.task_steps import step_defs_to_task_steps, verify_export_task_step
+from vroidstudio_mcp.task_steps import (
+    filter_completed_task_steps,
+    step_defs_to_task_steps,
+    verify_export_task_step,
+)
 from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 
 logger = logging.getLogger(__name__)
@@ -466,6 +470,9 @@ class AutomationEngine:
         executed = [s.get("name") or s.get("kind") for s in task_steps]
         if self._session:
             self._session.completed_steps.extend(executed)
+            task_id = data.get("task_id")
+            if task_id:
+                self._session.last_task_id = task_id
             self._save_session()
         return {
             "success": True,
@@ -473,6 +480,66 @@ class AutomationEngine:
             "steps_executed": executed,
             "evidence": data.get("evidence"),
         }
+
+    async def _run_catalog_via_task(
+        self,
+        steps: list[StepDef],
+        holder: dict[str, str],
+        *,
+        label: str,
+        export_path: str | None = None,
+        resume: bool = False,
+    ) -> list[str]:
+        """Preflight, launch/focus, automation_task, and hybrid fallback."""
+        completed = set(self._session.completed_steps if self._session else [])
+
+        pf = await self._run_preflight(self.config.output_dir)
+        if not pf.get("success"):
+            raise RuntimeError(f"Preflight failed: {pf.get('error', 'unknown')}")
+
+        if resume:
+            focus = await self.focus_vroid()
+            if not focus.get("success"):
+                raise RuntimeError(focus.get("error", "focus failed"))
+        else:
+            for step in steps:
+                if step.action == "launch":
+                    launch = await self.launch_vroid()
+                    if not launch.get("success"):
+                        raise RuntimeError(launch.get("error", "launch failed"))
+                elif step.action == "focus":
+                    focus = await self.focus_vroid()
+                    if not focus.get("success"):
+                        raise RuntimeError(focus.get("error", "focus failed"))
+
+        task_steps, hybrid = step_defs_to_task_steps(
+            steps,
+            holder,
+            scale_click=self._scale_click,
+            stable_frames_required=self.config.stable_frames_required,
+            stable_timeout_s=self.config.stable_timeout_s,
+        )
+        if export_path:
+            task_steps.append(verify_export_task_step(export_path))
+
+        if resume:
+            task_steps = filter_completed_task_steps(task_steps, completed)
+
+        executed: list[str] = []
+        if task_steps:
+            task_result = await self._run_steps_via_task(task_steps, label=label)
+            if not task_result.get("success"):
+                raise RuntimeError(task_result.get("error", "task failed"))
+            executed.extend(task_result.get("steps_executed") or [])
+
+        for step in hybrid:
+            step_name = step.name or step.action
+            if resume and step_name in completed:
+                continue
+            await self._execute_step(step, holder)
+            executed.append(step_name)
+
+        return executed
 
     async def run_template(
         self,
@@ -507,40 +574,19 @@ class AutomationEngine:
         steps = self.catalog.templates[template_name]
         executed: list[str] = []
         try:
-            if self.config.use_cua_task and not resume:
-                pf = await self._run_preflight(self.config.output_dir)
-                if not pf.get("success"):
-                    return {"success": False, "template": template_name, "session_id": sid, **pf}
-
-                for step in steps:
-                    if step.action == "launch":
-                        launch = await self.launch_vroid()
-                        if not launch.get("success"):
-                            raise RuntimeError(launch.get("error", "launch failed"))
-                    elif step.action == "focus":
-                        focus = await self.focus_vroid()
-                        if not focus.get("success"):
-                            raise RuntimeError(focus.get("error", "focus failed"))
-
-                task_steps, hybrid = step_defs_to_task_steps(
-                    steps,
-                    holder,
-                    scale_click=self._scale_click,
-                    stable_frames_required=self.config.stable_frames_required,
-                    stable_timeout_s=self.config.stable_timeout_s,
-                )
-                if export_path:
-                    task_steps.append(verify_export_task_step(holder["path"]))
-
-                task_result = await self._run_steps_via_task(task_steps, label=f"template:{template_name}")
-                if not task_result.get("success"):
-                    raise RuntimeError(task_result.get("error", "task failed"))
-                executed.extend(task_result.get("steps_executed") or [])
-
-                for step in hybrid:
-                    step_name = step.name or step.action
-                    await self._execute_step(step, holder)
-                    executed.append(step_name)
+            if self.config.use_cua_task:
+                try:
+                    executed = await self._run_catalog_via_task(
+                        steps,
+                        holder,
+                        label=f"template:{template_name}",
+                        export_path=holder.get("path") if export_path else None,
+                        resume=resume,
+                    )
+                except RuntimeError as exc:
+                    if "Preflight failed" in str(exc):
+                        return {"success": False, "template": template_name, "session_id": sid, "error": str(exc)}
+                    raise
             else:
                 for step in steps:
                     step_name = step.name or step.action
@@ -639,44 +685,24 @@ class AutomationEngine:
         executed: list[str] = []
 
         try:
-            if self.config.use_cua_task and not resume:
-                pf = await self._run_preflight(self.config.output_dir)
-                if not pf.get("success"):
-                    return {
-                        "success": False,
-                        "archetype_id": archetype_id,
-                        "session_id": sid,
-                        **pf,
-                    }
-
-                for step in steps:
-                    if step.action == "launch":
-                        launch = await self.launch_vroid()
-                        if not launch.get("success"):
-                            raise RuntimeError(launch.get("error", "launch failed"))
-                    elif step.action == "focus":
-                        focus = await self.focus_vroid()
-                        if not focus.get("success"):
-                            raise RuntimeError(focus.get("error", "focus failed"))
-
-                task_steps, hybrid = step_defs_to_task_steps(
-                    steps,
-                    export_holder,
-                    scale_click=self._scale_click,
-                    stable_frames_required=self.config.stable_frames_required,
-                    stable_timeout_s=self.config.stable_timeout_s,
-                )
-                task_steps.append(verify_export_task_step(export_path))
-
-                task_result = await self._run_steps_via_task(task_steps, label=archetype_id)
-                if not task_result.get("success"):
-                    raise RuntimeError(task_result.get("error", "task failed"))
-                executed.extend(task_result.get("steps_executed") or [])
-
-                for step in hybrid:
-                    step_name = step.name or step.action
-                    await self._execute_step(step, export_holder)
-                    executed.append(step_name)
+            if self.config.use_cua_task:
+                try:
+                    executed = await self._run_catalog_via_task(
+                        steps,
+                        export_holder,
+                        label=archetype_id,
+                        export_path=export_path,
+                        resume=resume,
+                    )
+                except RuntimeError as exc:
+                    if "Preflight failed" in str(exc):
+                        return {
+                            "success": False,
+                            "archetype_id": archetype_id,
+                            "session_id": sid,
+                            "error": str(exc),
+                        }
+                    raise
             else:
                 for step in steps:
                     step_name = step.name or step.action

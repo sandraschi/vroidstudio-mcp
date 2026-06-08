@@ -1,7 +1,11 @@
 """Tests for StepDef → automation_task conversion."""
 
 from vroidstudio_mcp.archetypes import StepDef
-from vroidstudio_mcp.task_steps import step_defs_to_task_steps, verify_export_task_step
+from vroidstudio_mcp.task_steps import (
+    filter_completed_task_steps,
+    step_defs_to_task_steps,
+    verify_export_task_step,
+)
 
 
 def test_shortcut_and_dialog_conversion():
@@ -50,6 +54,17 @@ def test_click_scaled_and_hybrid_fallback():
     assert task_steps[0]["y"] == 400
     assert len(hybrid) == 1
     assert hybrid[0].action == "hotkey"
+
+
+def test_filter_completed_task_steps():
+    steps = [
+        {"name": "focus_window", "kind": "focus"},
+        {"name": "new_project", "kind": "shortcut"},
+        {"name": "verify_export", "kind": "assert_file"},
+    ]
+    remaining = filter_completed_task_steps(steps, {"focus_window", "new_project"})
+    assert len(remaining) == 1
+    assert remaining[0]["name"] == "verify_export"
 
 
 def test_verify_export_step():

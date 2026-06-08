@@ -74,6 +74,7 @@ class SessionState:
         last_screenshot: str | None = None,
         export_path: str | None = None,
         error: str | None = None,
+        last_task_id: str | None = None,
     ) -> None:
         self.session_id = session_id
         self.archetype_id = archetype_id
@@ -83,6 +84,7 @@ class SessionState:
         self.last_screenshot = last_screenshot
         self.export_path = export_path
         self.error = error
+        self.last_task_id = last_task_id
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -94,6 +96,7 @@ class SessionState:
             "last_screenshot": self.last_screenshot,
             "export_path": self.export_path,
             "error": self.error,
+            "last_task_id": self.last_task_id,
         }
 
     @classmethod
@@ -107,4 +110,5 @@ class SessionState:
             last_screenshot=data.get("last_screenshot"),
             export_path=data.get("export_path"),
             error=data.get("error"),
+            last_task_id=data.get("last_task_id"),
         )
