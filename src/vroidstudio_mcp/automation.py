@@ -16,10 +16,25 @@ from typing import Any
 from vroidstudio_mcp.archetypes import ArchetypeCatalog, StepDef, load_catalog
 from vroidstudio_mcp.config import VRoidStudioConfig
 from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoidStudioShortcuts
-from vroidstudio_mcp.pywinauto_client import keyboard, mouse_click, visual_screenshot, windows
+from vroidstudio_mcp.pywinauto_client import automation_assert, keyboard, mouse_click, visual_screenshot, windows
 from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 
 logger = logging.getLogger(__name__)
+
+_MUTATION_ACTIONS = frozenset(
+    {
+        "shortcut",
+        "hotkey",
+        "press",
+        "type",
+        "click",
+        "sample_click",
+        "export_vrm",
+        "export_dialog",
+        "open_file",
+        "save_file",
+    }
+)
 
 
 def _file_hash(path: Path) -> str:
@@ -52,7 +67,39 @@ class AutomationEngine:
             raise RuntimeError(result.get("error", "screenshot failed"))
         return path
 
+    def _assert_request_base(self) -> dict[str, Any]:
+        req: dict[str, Any] = {}
+        region = self.config.stable_region()
+        if region:
+            req.update(region)
+        return req
+
     async def _wait_stable(self, label: str) -> Path:
+        if self.config.use_cua_assert and self._handle:
+            fields: dict[str, Any] = {
+                "window_handle": self._handle,
+                "stable_frames_required": self.config.stable_frames_required,
+                "poll_interval_s": self.config.stable_poll_interval_s,
+                "timeout_s": self.config.stable_timeout_s,
+                "hash_algorithm": self.config.hash_algorithm,
+                "output_dir": str(self.config.screenshot_dir),
+                **self._assert_request_base(),
+            }
+            result = await automation_assert("wait_stable", base_url=self.config.pywinauto_url, **fields)
+            if result.get("success"):
+                data = result.get("data") or {}
+                shot = data.get("screenshot_path")
+                if shot and Path(shot).is_file():
+                    return Path(shot)
+            logger.warning(
+                "cua-mcp wait_stable failed for %s (%s) — falling back to local hash poll",
+                label,
+                result.get("error"),
+            )
+
+        return await self._wait_stable_local(label)
+
+    async def _wait_stable_local(self, label: str) -> Path:
         deadline = time.monotonic() + self.config.stable_timeout_s
         last_hash = ""
         stable_count = 0
@@ -80,8 +127,35 @@ class AutomationEngine:
     async def _verify_change(self, before: Path, after: Path, step: StepDef) -> None:
         if not step.require_change or not self.config.verify_ui_change:
             return
+
+        step_name = step.name or step.action
+        diff_path = str(self.config.screenshot_dir / f"diff_{step_name}.png")
+
+        if self.config.use_cua_assert:
+            fields: dict[str, Any] = {
+                "image_path": str(before),
+                "image_path_b": str(after),
+                "change_threshold_pct": self.config.change_threshold_pct,
+                "output_path": diff_path,
+                **self._assert_request_base(),
+            }
+            result = await automation_assert("assert_changed", base_url=self.config.pywinauto_url, **fields)
+            if result.get("success"):
+                return
+            data = result.get("data") or {}
+            if "changed_pct" in data:
+                tip = result.get("recovery_tip") or ""
+                raise RuntimeError(
+                    f"UI unchanged after step '{step_name}' "
+                    f"({data['changed_pct']}% < {self.config.change_threshold_pct}%). {tip}"
+                )
+            logger.warning(
+                "cua-mcp assert_changed unavailable (%s) — falling back to local hash",
+                result.get("error"),
+            )
+
         if _file_hash(before) == _file_hash(after):
-            raise RuntimeError(f"UI unchanged after step '{step.name}' — expected visual change")
+            raise RuntimeError(f"UI unchanged after step '{step_name}' — expected visual change")
 
     def _set_state(self, state: WorkflowState) -> None:
         if self._session:
@@ -143,6 +217,10 @@ class AutomationEngine:
 
         for attempt in range(self.config.max_retries):
             try:
+                if step.action in _MUTATION_ACTIONS and self._handle:
+                    focus = await self.focus_vroid()
+                    if not focus.get("success"):
+                        raise RuntimeError(focus.get("error", "focus failed before step"))
                 await self._run_step_action(step, export_path_holder)
                 await self._wait_stable(step_name)
                 after = await self._screenshot(f"after_{step_name}.png")

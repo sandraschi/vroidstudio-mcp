@@ -42,8 +42,29 @@ class VRoidStudioConfig:
     stable_frames_required: int = 3
     stable_timeout_s: float = 15.0
     verify_ui_change: bool = True
+    use_cua_assert: bool = field(
+        default_factory=lambda: os.environ.get("VROID_USE_CUA_ASSERT", "1").strip().lower() not in ("0", "false", "no")
+    )
+    hash_algorithm: str = field(
+        default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash")
+    )
+    change_threshold_pct: float = field(
+        default_factory=lambda: float(os.environ.get("VROID_CHANGE_THRESHOLD_PCT", "1.0"))
+    )
     baseline_width: int = 1920
     baseline_height: int = 1080
+
+    def stable_region(self) -> dict[str, int] | None:
+        """Optional crop for stability/verify (editor canvas only)."""
+        keys = ("VROID_STABLE_REGION_LEFT", "VROID_STABLE_REGION_TOP", "VROID_STABLE_REGION_RIGHT", "VROID_STABLE_REGION_BOTTOM")
+        if not all(os.environ.get(k) for k in keys):
+            return None
+        return {
+            "region_left": int(os.environ["VROID_STABLE_REGION_LEFT"]),
+            "region_top": int(os.environ["VROID_STABLE_REGION_TOP"]),
+            "region_right": int(os.environ["VROID_STABLE_REGION_RIGHT"]),
+            "region_bottom": int(os.environ["VROID_STABLE_REGION_BOTTOM"]),
+        }
 
     @property
     def screenshot_dir(self) -> Path:
