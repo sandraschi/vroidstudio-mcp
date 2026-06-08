@@ -11,7 +11,15 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_PYWINAUTO_URL = os.environ.get("PYWINAUTO_MCP_URL", "http://127.0.0.1:10789")
+def _default_cua_url() -> str:
+    return (
+        os.environ.get("CUA_MCP_URL")
+        or os.environ.get("PYWINAUTO_MCP_URL")
+        or "http://127.0.0.1:10789"
+    )
+
+
+DEFAULT_PYWINAUTO_URL = _default_cua_url()
 
 
 def parse_tool_result(raw: Any) -> dict[str, Any]:
@@ -95,6 +103,32 @@ async def call_pywinauto_tool(
         "data": tool_result.get("data"),
         "tool": tool_name,
     }
+
+
+async def automation_shortcut(
+    operation: str,
+    *,
+    app: str = "vroidstudio",
+    action: str = "",
+    window_handle: int | None = None,
+    verify_stable: bool | None = None,
+    base_url: str | None = None,
+    timeout: float = 120.0,
+) -> dict[str, Any]:
+    """Call automation_shortcut on cua-mcp."""
+    req: dict[str, Any] = {"operation": operation, "app": app}
+    if action:
+        req["action"] = action
+    if window_handle is not None:
+        req["window_handle"] = window_handle
+    if verify_stable is not None:
+        req["verify_stable"] = verify_stable
+    return await call_pywinauto_tool(
+        "automation_shortcut",
+        {"request": req},
+        base_url=base_url,
+        timeout=timeout,
+    )
 
 
 async def automation_dialog(

@@ -26,7 +26,11 @@ class VRoidStudioConfig:
         )
     )
     pywinauto_url: str = field(
-        default_factory=lambda: os.environ.get("PYWINAUTO_MCP_URL", "http://127.0.0.1:10789")
+        default_factory=lambda: (
+            os.environ.get("CUA_MCP_URL")
+            or os.environ.get("PYWINAUTO_MCP_URL")
+            or "http://127.0.0.1:10789"
+        )
     )
     work_dir: Path = field(
         default_factory=lambda: Path(
@@ -47,6 +51,9 @@ class VRoidStudioConfig:
     )
     use_cua_dialog: bool = field(
         default_factory=lambda: os.environ.get("VROID_USE_CUA_DIALOG", "1").strip().lower() not in ("0", "false", "no")
+    )
+    use_cua_shortcut: bool = field(
+        default_factory=lambda: os.environ.get("VROID_USE_CUA_SHORTCUT", "1").strip().lower() not in ("0", "false", "no")
     )
     hash_algorithm: str = field(
         default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash")

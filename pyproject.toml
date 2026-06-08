@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vroidstudio-mcp"
-version = "0.3.2"
+version = "0.3.3"
 description = "VRoid Studio brute-force automation via pywinauto-mcp — 55 archetypes, state machine, verification."
 readme = "README.md"
 requires-python = ">=3.12"

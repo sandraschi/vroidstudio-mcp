@@ -19,6 +19,7 @@ from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoi
 from vroidstudio_mcp.pywinauto_client import (
     automation_assert,
     automation_dialog,
+    automation_shortcut,
     call_pywinauto_tool,
     keyboard,
     mouse_click,
@@ -145,6 +146,7 @@ class AutomationEngine:
                 "image_path_b": str(after),
                 "change_threshold_pct": self.config.change_threshold_pct,
                 "output_path": diff_path,
+                "evidence_bundle": True,
                 **self._assert_request_base(),
             }
             result = await automation_assert("assert_changed", base_url=self.config.pywinauto_url, **fields)
@@ -308,10 +310,31 @@ class AutomationEngine:
         if post_confirm_pause > 0:
             await asyncio.sleep(post_confirm_pause)
 
-    async def _send_shortcut(self, operation: str) -> None:
+    async def _send_shortcut(self, operation: str, *, verify_stable: bool | None = None) -> None:
+        if self.config.use_cua_shortcut:
+            result = await automation_shortcut(
+                "send",
+                app="vroidstudio",
+                action=operation,
+                window_handle=self._handle,
+                verify_stable=verify_stable,
+                base_url=self.config.pywinauto_url,
+            )
+            if result.get("success"):
+                return
+            logger.warning(
+                "cua-mcp shortcut %s failed (%s) — falling back to raw keyboard",
+                operation,
+                result.get("error"),
+            )
+
         keys = VRoidStudioShortcuts.as_hotkey_args(operation)
         if len(keys) == 1 and not VRoidStudioShortcuts.is_modifier_combo(keys):
-            result = await keyboard("press", key=keys[0], base_url=self.config.pywinauto_url)
+            result = await keyboard(
+                "press",
+                key=keys[0],
+                base_url=self.config.pywinauto_url,
+            )
         else:
             result = await keyboard("hotkey", keys=keys, base_url=self.config.pywinauto_url)
         if not result.get("success"):
