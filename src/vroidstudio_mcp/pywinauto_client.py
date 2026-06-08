@@ -97,6 +97,23 @@ async def call_pywinauto_tool(
     }
 
 
+async def automation_dialog(
+    operation: str,
+    *,
+    base_url: str | None = None,
+    timeout: float = 120.0,
+    **fields: Any,
+) -> dict[str, Any]:
+    """Call automation_dialog on cua-mcp."""
+    req: dict[str, Any] = {"operation": operation, **fields}
+    return await call_pywinauto_tool(
+        "automation_dialog",
+        {"request": req},
+        base_url=base_url,
+        timeout=timeout,
+    )
+
+
 async def automation_assert(
     operation: str,
     *,

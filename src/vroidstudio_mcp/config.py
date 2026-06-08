@@ -45,6 +45,9 @@ class VRoidStudioConfig:
     use_cua_assert: bool = field(
         default_factory=lambda: os.environ.get("VROID_USE_CUA_ASSERT", "1").strip().lower() not in ("0", "false", "no")
     )
+    use_cua_dialog: bool = field(
+        default_factory=lambda: os.environ.get("VROID_USE_CUA_DIALOG", "1").strip().lower() not in ("0", "false", "no")
+    )
     hash_algorithm: str = field(
         default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash")
     )

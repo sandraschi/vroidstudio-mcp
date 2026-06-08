@@ -16,7 +16,15 @@ from typing import Any
 from vroidstudio_mcp.archetypes import ArchetypeCatalog, StepDef, load_catalog
 from vroidstudio_mcp.config import VRoidStudioConfig
 from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoidStudioShortcuts
-from vroidstudio_mcp.pywinauto_client import automation_assert, keyboard, mouse_click, visual_screenshot, windows
+from vroidstudio_mcp.pywinauto_client import (
+    automation_assert,
+    automation_dialog,
+    call_pywinauto_tool,
+    keyboard,
+    mouse_click,
+    visual_screenshot,
+    windows,
+)
 from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 
 logger = logging.getLogger(__name__)
@@ -266,6 +274,40 @@ class AutomationEngine:
                         f"Failure screenshot: {fail_shot}"
                     ) from exc
 
+    async def _submit_dialog_path(self, path: str, *, post_confirm_pause: float = 0.0) -> None:
+        if self.config.use_cua_dialog:
+            result = await automation_dialog(
+                "submit_path",
+                path=path,
+                use_clipboard=True,
+                post_confirm_pause_s=post_confirm_pause,
+                base_url=self.config.pywinauto_url,
+            )
+            if result.get("success"):
+                return
+            logger.warning(
+                "cua-mcp submit_path failed (%s) — falling back to local dialog entry",
+                result.get("error"),
+            )
+
+        clip = await call_pywinauto_tool(
+            "automation_system",
+            {"request": {"operation": "clipboard_set", "text": path}},
+            base_url=self.config.pywinauto_url,
+        )
+        if not clip.get("success"):
+            await keyboard("hotkey", keys=["ctrl", "a"], base_url=self.config.pywinauto_url)
+            await asyncio.sleep(0.2)
+            await keyboard("type", text=path, base_url=self.config.pywinauto_url)
+        else:
+            await keyboard("hotkey", keys=["ctrl", "a"], base_url=self.config.pywinauto_url)
+            await asyncio.sleep(0.1)
+            await keyboard("hotkey", keys=["ctrl", "v"], base_url=self.config.pywinauto_url)
+        await asyncio.sleep(0.3)
+        await self._send_shortcut("dialog_ok")
+        if post_confirm_pause > 0:
+            await asyncio.sleep(post_confirm_pause)
+
     async def _send_shortcut(self, operation: str) -> None:
         keys = VRoidStudioShortcuts.as_hotkey_args(operation)
         if len(keys) == 1 and not VRoidStudioShortcuts.is_modifier_combo(keys):
@@ -325,34 +367,21 @@ class AutomationEngine:
             return
         if action == "export_dialog":
             path = export_path_holder.get("path", "")
-            await keyboard("hotkey", keys=["ctrl", "a"], base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.2)
-            await keyboard("type", text=path, base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.3)
-            await self._send_shortcut("dialog_ok")
-            await asyncio.sleep(step.seconds or 6.0)
+            if not path:
+                raise RuntimeError("export_dialog step missing export path")
+            await self._submit_dialog_path(path, post_confirm_pause=step.seconds or 6.0)
             return
         if action == "open_file":
             path = step.text or export_path_holder.get("open_path", "")
             if not path:
                 raise RuntimeError("open_file step missing open_path")
-            await keyboard("hotkey", keys=["ctrl", "a"], base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.2)
-            await keyboard("type", text=path, base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.3)
-            await self._send_shortcut("dialog_ok")
-            await asyncio.sleep(step.seconds or 4.0)
+            await self._submit_dialog_path(path, post_confirm_pause=step.seconds or 4.0)
             return
         if action == "save_file":
             path = step.text or export_path_holder.get("save_path", "")
             if not path:
                 raise RuntimeError("save_file step missing save_path")
-            await keyboard("hotkey", keys=["ctrl", "a"], base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.2)
-            await keyboard("type", text=path, base_url=self.config.pywinauto_url)
-            await asyncio.sleep(0.3)
-            await self._send_shortcut("dialog_ok")
-            await asyncio.sleep(step.seconds or 3.0)
+            await self._submit_dialog_path(path, post_confirm_pause=step.seconds or 3.0)
             return
         if action == "verify_file":
             path = Path(export_path_holder.get("path", step.path))

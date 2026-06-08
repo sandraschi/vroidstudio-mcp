@@ -14,7 +14,7 @@ No native VRoid API exists. This server drives the GUI with a **state machine** 
 ## Prerequisites
 
 - VRoid Studio installed (`VROIDSTUDIO_PATH`)
-- **cua-mcp** (`pywinauto-mcp`) running on **10789** — v0.4.3+ for `automation_assert`
+- **cua-mcp** (`pywinauto-mcp`) running on **10789** — v0.4.4+ for `automation_assert` and `automation_dialog`
 - Calibrate `sample_click` coords in `config/archetypes.yaml` or env `VROID_UI_SCALE_X/Y`
 
 ### Verification (cua-mcp)
@@ -24,6 +24,7 @@ vroidstudio delegates UI stability checks to cua-mcp `automation_assert` (dHash 
 | Env | Default | Purpose |
 |-----|---------|---------|
 | `VROID_USE_CUA_ASSERT` | `1` | Set `0` to force local hash-only verification |
+| `VROID_USE_CUA_DIALOG` | `1` | Set `0` to force local clipboard+keyboard dialog entry |
 | `VROID_HASH_ALGORITHM` | `dhash` | Passed to cua-mcp `wait_stable` |
 | `VROID_CHANGE_THRESHOLD_PCT` | `1.0` | Min % change for `assert_changed` |
 | `VROID_STABLE_REGION_*` | unset | Crop editor canvas (left/top/right/bottom) |
