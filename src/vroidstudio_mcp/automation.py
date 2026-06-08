@@ -765,12 +765,18 @@ class AutomationEngine:
 
 
 def _extract_handle(found: dict[str, Any]) -> int | None:
+    candidates: list[Any] = [found.get("data")]
     result = found.get("result")
-    data = getattr(result, "data", None) if result is not None else None
-    if isinstance(data, dict) and data.get("handle"):
-        return int(data["handle"])
-    if isinstance(result, dict):
-        inner = result.get("data") or result
-        if isinstance(inner, dict) and inner.get("handle"):
-            return int(inner["handle"])
+    if result is not None:
+        candidates.append(getattr(result, "data", None))
+        if isinstance(result, dict):
+            candidates.append(result.get("data"))
+    for data in candidates:
+        if not isinstance(data, dict):
+            continue
+        if data.get("handle"):
+            return int(data["handle"])
+        windows = data.get("windows") or []
+        if windows and isinstance(windows[0], dict) and windows[0].get("handle"):
+            return int(windows[0]["handle"])
     return None

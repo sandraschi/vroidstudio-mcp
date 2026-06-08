@@ -7,6 +7,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 
+def _default_vroid_studio_path() -> str:
+    local = Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "VRoidStudio"
+    if local.is_dir():
+        versions = sorted(local.glob("*/VRoidStudio.exe"), reverse=True)
+        if versions:
+            return str(versions[0])
+    return r"C:\Program Files\VRoidStudio\VRoidStudio.exe"
+
+
 def _repo_config_dir() -> Path:
     env = os.environ.get("VROIDSTUDIO_MCP_CONFIG_DIR")
     if env:
@@ -20,10 +29,8 @@ def _repo_config_dir() -> Path:
 @dataclass
 class VRoidStudioConfig:
     vroid_studio_path: str = field(
-        default_factory=lambda: os.environ.get(
-            "VROIDSTUDIO_PATH",
-            r"C:\Program Files\VRoidStudio\VRoidStudio.exe",
-        )
+        default_factory=lambda: os.environ.get("VROIDSTUDIO_PATH")
+        or _default_vroid_studio_path()
     )
     pywinauto_url: str = field(
         default_factory=lambda: (
@@ -81,16 +88,27 @@ class VRoidStudioConfig:
     baseline_height: int = 1080
 
     def stable_region(self) -> dict[str, int] | None:
-        """Optional crop for stability/verify (editor canvas only)."""
+        """Optional crop for stability/verify (editor canvas only).
+
+        Env vars override cua-mcp vroidstudio profile defaults (T2.4).
+        """
         keys = ("VROID_STABLE_REGION_LEFT", "VROID_STABLE_REGION_TOP", "VROID_STABLE_REGION_RIGHT", "VROID_STABLE_REGION_BOTTOM")
-        if not all(os.environ.get(k) for k in keys):
-            return None
-        return {
-            "region_left": int(os.environ["VROID_STABLE_REGION_LEFT"]),
-            "region_top": int(os.environ["VROID_STABLE_REGION_TOP"]),
-            "region_right": int(os.environ["VROID_STABLE_REGION_RIGHT"]),
-            "region_bottom": int(os.environ["VROID_STABLE_REGION_BOTTOM"]),
-        }
+        if all(os.environ.get(k) for k in keys):
+            return {
+                "region_left": int(os.environ["VROID_STABLE_REGION_LEFT"]),
+                "region_top": int(os.environ["VROID_STABLE_REGION_TOP"]),
+                "region_right": int(os.environ["VROID_STABLE_REGION_RIGHT"]),
+                "region_bottom": int(os.environ["VROID_STABLE_REGION_BOTTOM"]),
+            }
+        use_profile = os.environ.get("VROID_USE_PROFILE_REGION", "1").strip().lower() not in ("0", "false", "no")
+        if use_profile:
+            return {
+                "region_left": 280,
+                "region_top": 120,
+                "region_right": 1640,
+                "region_bottom": 980,
+            }
+        return None
 
     @property
     def screenshot_dir(self) -> Path:

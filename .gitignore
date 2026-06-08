@@ -70,6 +70,24 @@ coverage.xml
 # Rust / Zed IDE
 target/
 
-# Webapp
+# Webapp / frontend build artifacts
 webapp/node_modules/
 webapp/dist/
+web_sota/node_modules/
+web_sota/dist/
+
+# Backup files (fileops, editors)
+*.bak
+*.bak.*
+*~
+*.swp
+*.swo
+
+# Ruff / linting artefacts
+ruff_stats*.txt
+
+# Coverage artefacts
+htmlcov/
+coverage.xml
+.coverage
+.coverage.*

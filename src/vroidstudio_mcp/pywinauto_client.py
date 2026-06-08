@@ -55,6 +55,9 @@ def parse_tool_result(raw: Any) -> dict[str, Any]:
         return {"status": "error", "message": "unparseable tool result list"}
 
     if isinstance(raw, dict):
+        sc = raw.get("structured_content")
+        if isinstance(sc, dict) and "status" in sc:
+            return sc
         if "status" in raw and "message" in raw:
             return raw
         if "result" in raw:
