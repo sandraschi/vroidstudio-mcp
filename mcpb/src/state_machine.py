@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import Enum
 from typing import Any
 
 
-class WorkflowState(StrEnum):
+class WorkflowState(str, Enum):
     IDLE = "idle"
     LAUNCHING = "launching"
     LAUNCHED = "launched"

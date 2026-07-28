@@ -41,6 +41,8 @@ def test_vtuber_archetypes_use_new_templates(config_paths):
     assert catalog.get("vtuber_female").template == "female_vtuber"
     assert catalog.get("vrchat_male").template == "male_editor_tour"
     assert catalog.get("stream_ready").template == "female_photo_booth"
+
+
 def test_all_archetypes_have_templates(config_paths):
     archetypes_path, defaults_path = config_paths
     catalog = load_catalog(archetypes_path, defaults_path)

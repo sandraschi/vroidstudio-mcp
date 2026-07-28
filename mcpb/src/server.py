@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+from pathlib import Path
 from typing import Annotated, Any
 
 import uvicorn
@@ -17,8 +18,8 @@ from pydantic import BaseModel, Field
 from vroidstudio_mcp.automation import AutomationEngine
 from vroidstudio_mcp.config import VRoidStudioConfig
 from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoidStudioShortcuts
-from vroidstudio_mcp.pywinauto_client import visual_screenshot, windows
 from vroidstudio_mcp.recipes import OUTPUT_DIR, SCREENSHOT_DIR, focus_vroid, launch_vroid_studio, quick_gal_export
+from vroidstudio_mcp.pywinauto_client import visual_screenshot, windows
 
 logger = logging.getLogger("vroidstudio-mcp")
 

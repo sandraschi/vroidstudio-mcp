@@ -212,9 +212,7 @@ def compose(*parts: list[Step]) -> list[Step]:
 
 
 def build_templates() -> dict[str, dict[str, list[Step]]]:
-    def base(*mid):
-        return compose(launch(), new_project(), *mid, save_project(), export_vrm())
-
+    base = lambda *mid: compose(launch(), new_project(), *mid, save_project(), export_vrm())
     sample = pick_sample()
 
     return {

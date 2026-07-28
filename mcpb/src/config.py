@@ -29,11 +29,14 @@ def _repo_config_dir() -> Path:
 @dataclass
 class VRoidStudioConfig:
     vroid_studio_path: str = field(
-        default_factory=lambda: os.environ.get("VROIDSTUDIO_PATH") or _default_vroid_studio_path()
+        default_factory=lambda: os.environ.get("VROIDSTUDIO_PATH")
+        or _default_vroid_studio_path()
     )
     pywinauto_url: str = field(
         default_factory=lambda: (
-            os.environ.get("CUA_MCP_URL") or os.environ.get("PYWINAUTO_MCP_URL") or "http://127.0.0.1:10789"
+            os.environ.get("CUA_MCP_URL")
+            or os.environ.get("PYWINAUTO_MCP_URL")
+            or "http://127.0.0.1:10789"
         )
     )
     work_dir: Path = field(
@@ -57,17 +60,14 @@ class VRoidStudioConfig:
         default_factory=lambda: os.environ.get("VROID_USE_CUA_DIALOG", "1").strip().lower() not in ("0", "false", "no")
     )
     use_cua_shortcut: bool = field(
-        default_factory=lambda: (
-            os.environ.get("VROID_USE_CUA_SHORTCUT", "1").strip().lower() not in ("0", "false", "no")
-        )
+        default_factory=lambda: os.environ.get("VROID_USE_CUA_SHORTCUT", "1").strip().lower() not in ("0", "false", "no")
     )
     use_cua_task: bool = field(
         default_factory=lambda: os.environ.get("VROID_USE_CUA_TASK", "1").strip().lower() not in ("0", "false", "no")
     )
     use_sysadmin_preflight: bool = field(
-        default_factory=lambda: (
-            os.environ.get("VROID_USE_SYSADMIN_PREFLIGHT", "1").strip().lower() not in ("0", "false", "no")
-        )
+        default_factory=lambda: os.environ.get("VROID_USE_SYSADMIN_PREFLIGHT", "1").strip().lower()
+        not in ("0", "false", "no")
     )
     system_admin_url: str = field(
         default_factory=lambda: os.environ.get("SYSTEM_ADMIN_MCP_URL", "http://127.0.0.1:10861")
@@ -78,7 +78,9 @@ class VRoidStudioConfig:
     preflight_min_disk_mb: float = field(
         default_factory=lambda: float(os.environ.get("VROID_PREFLIGHT_MIN_DISK_MB", "500"))
     )
-    hash_algorithm: str = field(default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash"))
+    hash_algorithm: str = field(
+        default_factory=lambda: os.environ.get("VROID_HASH_ALGORITHM", "dhash")
+    )
     change_threshold_pct: float = field(
         default_factory=lambda: float(os.environ.get("VROID_CHANGE_THRESHOLD_PCT", "1.0"))
     )
@@ -90,12 +92,7 @@ class VRoidStudioConfig:
 
         Env vars override cua-mcp vroidstudio profile defaults (T2.4).
         """
-        keys = (
-            "VROID_STABLE_REGION_LEFT",
-            "VROID_STABLE_REGION_TOP",
-            "VROID_STABLE_REGION_RIGHT",
-            "VROID_STABLE_REGION_BOTTOM",
-        )
+        keys = ("VROID_STABLE_REGION_LEFT", "VROID_STABLE_REGION_TOP", "VROID_STABLE_REGION_RIGHT", "VROID_STABLE_REGION_BOTTOM")
         if all(os.environ.get(k) for k in keys):
             return {
                 "region_left": int(os.environ["VROID_STABLE_REGION_LEFT"]),

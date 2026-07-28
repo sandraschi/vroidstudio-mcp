@@ -11,9 +11,12 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-
 def _default_cua_url() -> str:
-    return os.environ.get("CUA_MCP_URL") or os.environ.get("PYWINAUTO_MCP_URL") or "http://127.0.0.1:10789"
+    return (
+        os.environ.get("CUA_MCP_URL")
+        or os.environ.get("PYWINAUTO_MCP_URL")
+        or "http://127.0.0.1:10789"
+    )
 
 
 DEFAULT_PYWINAUTO_URL = _default_cua_url()

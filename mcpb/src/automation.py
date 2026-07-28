@@ -9,13 +9,13 @@ import logging
 import subprocess
 import time
 import uuid
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from vroidstudio_mcp.archetypes import StepDef, load_catalog
+from vroidstudio_mcp.archetypes import ArchetypeCatalog, StepDef, load_catalog
 from vroidstudio_mcp.config import VRoidStudioConfig
-from vroidstudio_mcp.keyboard_shortcuts import VRoidStudioShortcuts
+from vroidstudio_mcp.keyboard_shortcuts import SHORTCUTS_DOCUMENTATION_URL, VRoidStudioShortcuts
 from vroidstudio_mcp.preflight import PreflightConfig, run_preflight
 from vroidstudio_mcp.pywinauto_client import (
     automation_assert,
@@ -28,12 +28,12 @@ from vroidstudio_mcp.pywinauto_client import (
     visual_screenshot,
     windows,
 )
-from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 from vroidstudio_mcp.task_steps import (
     filter_completed_task_steps,
     step_defs_to_task_steps,
     verify_export_task_step,
 )
+from vroidstudio_mcp.state_machine import SessionState, WorkflowState
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +136,7 @@ class AutomationEngine:
         raise TimeoutError(f"UI did not stabilize within {self.config.stable_timeout_s}s ({label})")
 
     def _failure_path(self, step_name: str) -> Path:
-        ts = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+        ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         arch = self._session.archetype_id if self._session else "unknown"
         return self.config.failure_dir / f"{ts}_{arch}_{step_name}.png"
 

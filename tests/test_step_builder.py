@@ -40,4 +40,11 @@ def test_clicks_only_for_presets_and_sample():
             continue
         clicks = [s for s in body["steps"] if s["action"] in ("click", "sample_click")]
         for c in clicks:
-            assert c["name"] in ("pick_sample", "hair_preset", "face_preset", "body_preset", "outfit_preset", "accessory_preset")
+            assert c["name"] in (
+                "pick_sample",
+                "hair_preset",
+                "face_preset",
+                "body_preset",
+                "outfit_preset",
+                "accessory_preset",
+            )

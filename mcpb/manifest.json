@@ -1,0 +1,22 @@
+{
+  "manifest_version": "0.2",
+  "name": "vroidstudio-mcp",
+  "version": "0.3.6",
+  "description": "VRoid Studio brute-force automation via pywinauto-mcp — 55 archetypes, state machine, verification.",
+  "author": { "name": "Sandra Schieder" },
+  "server": {
+    "type": "python",
+    "entry_point": "src/vroidstudio_mcp/__main__.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run","--directory","${PWD}","python","-m","vroidstudio_mcp"],
+      "env": {
+        "PYTHONPATH": "${PWD}/src",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  },
+  "tools": [
+    { "name": "vroid_studio", "description": "vroid_studio" }
+  ]
+}
