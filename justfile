@@ -1,19 +1,19 @@
 set windows-shell := ["powershell.exe", "-NoProfile", "-Command"]
 import 'scripts/just/fleet.just'
 
-# ── Dashboard ─────────────────────────────────────────────────────────────────
+# --- Dashboard ---
 
 # Open the interactive recipe dashboard in the browser
 default:
     @just --list
 
-# ── Environment ────────────────────────────────────────────────────────────────
+# --- Environment ---
 
 # Sync Python deps from pyproject.toml
 sync:
     Set-Location '{{justfile_directory()}}'; uv sync
 
-# ── Development ──────────────────────────────────────────────────────────────
+# --- Development ---
 
 # Run MCP server over stdio
 mcp:
@@ -27,7 +27,7 @@ web:
 frontend:
     Set-Location '{{justfile_directory()}}\webapp'; npm run dev
 
-# ── Quality ───────────────────────────────────────────────────────────────────
+# --- Quality ---
 
 # Python lint
 lint:
@@ -38,19 +38,19 @@ fix:
     Set-Location '{{justfile_directory()}}'; uv run ruff check . --fix --unsafe-fixes
     Set-Location '{{justfile_directory()}}'; uv run ruff format .
 
-# ── Testing ───────────────────────────────────────────────────────────────────
+# --- Testing ---
 
 # Run tests
 test:
     Set-Location '{{justfile_directory()}}'; uv run pytest tests/ -v
 
-# ── Security ─────────────────────────────────────────────────────────────────
+# --- Security ---
 
 # Bandit scan
 check-sec:
     Set-Location '{{justfile_directory()}}'; uv run bandit -r src/
 
-# ── Tauri NSIS ─────────────────────────────────────────────────────────────────
+# --- Tauri NSIS ---
 
 # Build the PyInstaller backend .exe and copy to Tauri resources
 build-sidecar:
@@ -65,3 +65,9 @@ build-native: build-sidecar
     Set-Location '{{justfile_directory()}}\native'
     npx @tauri-apps/cli build --bundles nsis
 
+
+# Bootstrap: install dev deps + pre-commit hook
+bootstrap:
+    uv sync --group dev
+    uv run pre-commit install
+    Write-Host "Pre-commit hooks installed." -ForegroundColor Green
