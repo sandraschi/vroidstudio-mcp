@@ -1,4 +1,4 @@
-"""FastMCP server — VRoid Studio brute-force automation with 55 archetypes."""
+"""FastMCP server - VRoid Studio brute-force automation with 55 archetypes."""
 
 from __future__ import annotations
 
@@ -70,7 +70,7 @@ async def vroid_studio(
     session_id: Annotated[str, Field(description="Session id for resume or session_status.")] = "",
     resume: Annotated[bool, Field(description="Resume run_archetype from last good step.")] = False,
 ) -> dict[str, Any]:
-    """VRoid Studio portmanteau — pywinauto brute-force with 55 archetypes."""
+    """VRoid Studio portmanteau - pywinauto brute-force with 55 archetypes."""
     op = operation.strip().lower()
     engine = _get_engine()
 

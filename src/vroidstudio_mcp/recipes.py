@@ -1,4 +1,4 @@
-"""VRoid Studio brute-force recipes — legacy wrappers over AutomationEngine."""
+"""VRoid Studio brute-force recipes - legacy wrappers over AutomationEngine."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ async def quick_gal_export(
     pick_sample: bool = True,
     export_wait_s: float = 8.0,
 ) -> dict[str, Any]:
-    """Fleet legacy recipe — maps to quick_gal archetype."""
+    """Fleet legacy recipe - maps to quick_gal archetype."""
     engine = AutomationEngine(_config)
     archetype_id = "quick_gal" if pick_sample else "blank_female"
     if output_name != "anime_gal.vrm":

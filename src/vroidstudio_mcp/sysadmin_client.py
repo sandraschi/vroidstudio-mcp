@@ -1,4 +1,4 @@
-"""HTTP client for system-admin-mcp — process and resource preflight."""
+"""HTTP client for system-admin-mcp - process and resource preflight."""
 
 from __future__ import annotations
 

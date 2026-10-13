@@ -1,4 +1,4 @@
-"""Composable VRoid workflow step fragments — shortcut-first, clicks only for presets."""
+"""Composable VRoid workflow step fragments - shortcut-first, clicks only for presets."""
 
 from __future__ import annotations
 

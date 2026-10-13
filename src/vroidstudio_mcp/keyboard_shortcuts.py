@@ -1,4 +1,4 @@
-"""VRoid Studio keyboard shortcuts — preferred over brittle UI clicks.
+"""VRoid Studio keyboard shortcuts - preferred over brittle UI clicks.
 
 Official reference:
 https://vroid.pixiv.help/hc/en-us/articles/900006050066

@@ -108,7 +108,7 @@ class AutomationEngine:
                 if shot and Path(shot).is_file():
                     return Path(shot)
             logger.warning(
-                "cua-mcp wait_stable failed for %s (%s) — falling back to local hash poll",
+                "cua-mcp wait_stable failed for %s (%s) - falling back to local hash poll",
                 label,
                 result.get("error"),
             )
@@ -167,12 +167,12 @@ class AutomationEngine:
                     f"({data['changed_pct']}% < {self.config.change_threshold_pct}%). {tip}"
                 )
             logger.warning(
-                "cua-mcp assert_changed unavailable (%s) — falling back to local hash",
+                "cua-mcp assert_changed unavailable (%s) - falling back to local hash",
                 result.get("error"),
             )
 
         if _file_hash(before) == _file_hash(after):
-            raise RuntimeError(f"UI unchanged after step '{step_name}' — expected visual change")
+            raise RuntimeError(f"UI unchanged after step '{step_name}' - expected visual change")
 
     def _set_state(self, state: WorkflowState) -> None:
         if self._session:
@@ -260,12 +260,12 @@ class AutomationEngine:
                 except Exception:
                     logger.exception("Could not capture failure screenshot for %s", step_name)
                 if step.optional:
-                    logger.warning("Optional step %s failed: %s — continuing", step_name, exc)
+                    logger.warning("Optional step %s failed: %s - continuing", step_name, exc)
                     return
                 if attempt < self.config.max_retries - 1:
                     wait = min(self.config.retry_delay_s * (2**attempt), 10.0)
                     logger.warning(
-                        "Step %s failed (attempt %d/%d): %s — retry in %.1fs",
+                        "Step %s failed (attempt %d/%d): %s - retry in %.1fs",
                         step_name,
                         attempt + 1,
                         self.config.max_retries,
@@ -295,7 +295,7 @@ class AutomationEngine:
             if result.get("success"):
                 return
             logger.warning(
-                "cua-mcp submit_path failed (%s) — falling back to local dialog entry",
+                "cua-mcp submit_path failed (%s) - falling back to local dialog entry",
                 result.get("error"),
             )
 
@@ -330,7 +330,7 @@ class AutomationEngine:
             if result.get("success"):
                 return
             logger.warning(
-                "cua-mcp shortcut %s failed (%s) — falling back to raw keyboard",
+                "cua-mcp shortcut %s failed (%s) - falling back to raw keyboard",
                 operation,
                 result.get("error"),
             )

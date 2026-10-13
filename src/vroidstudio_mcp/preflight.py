@@ -115,7 +115,7 @@ async def run_preflight(
             }
         )
         if not cpu_ok:
-            warnings.append(f"High CPU load ({cpu_total:.0f}%) — automation may be slow")
+            warnings.append(f"High CPU load ({cpu_total:.0f}%) - automation may be slow")
 
     if config.require_vroid_process:
         found = False
