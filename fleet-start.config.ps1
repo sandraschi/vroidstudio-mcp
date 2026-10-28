@@ -5,7 +5,7 @@
     BackendPort  = 10881
     FrontendPort = 10880
     HealthPath   = '/health'
-    WebRoot      = 'web_sota'
+    WebRoot      = 'webapp'
     Backend = @{
         Kind          = 'uvicorn'
         UvicornTarget = 'vroidstudio_mcp.server:app'
